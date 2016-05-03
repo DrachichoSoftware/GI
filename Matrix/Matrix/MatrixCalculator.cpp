@@ -62,6 +62,23 @@ MATRIX MatrixCalculator::GetMinor(MATRIX matrix, int row, int column)
 	return finalMatrix;
 }
 
+MATRIX MatrixCalculator::Exclude(MATRIX matrix, int row, int column)
+{
+	for (size_t i = 0; i < matrix.size(); i++)
+	{
+		for (size_t j = 0; j < matrix[j].size(); j++)
+		{
+			if ((int)j == column)
+			{
+				matrix[i].erase(matrix[i].begin() + j); // Удаляем столбец поэлементно
+			}
+		}
+	}
+
+	matrix.erase(matrix.begin() + row); // Удаляем строку
+
+	return matrix;
+}
 
 MatrixCalculator::MatrixCalculator()
 {
@@ -87,7 +104,7 @@ MATRIX MatrixCalculator::AddMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 }
 
 
-MATRIX MultiplyMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
+MATRIX MatrixCalculator::MultiplyMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 {
 	MATRIX finalMatrix;
 	int rows = firstMatrix.size();
@@ -108,7 +125,7 @@ MATRIX MultiplyMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 	return finalMatrix;
 }
 
-MATRIX MultiplyOnNumber(double number, MATRIX multiplyingMatrix)
+MATRIX MatrixCalculator::MultiplyOnNumber(double number, MATRIX multiplyingMatrix)
 {
 	MATRIX finalMatrix;
 
@@ -123,7 +140,7 @@ MATRIX MultiplyOnNumber(double number, MATRIX multiplyingMatrix)
 	return finalMatrix;
 }
 
-MATRIX TransposeMatrix(MATRIX transposeningMatrix)
+MATRIX MatrixCalculator::TransposeMatrix(MATRIX transposeningMatrix)
 {
 	double tmp;
 
@@ -140,7 +157,7 @@ MATRIX TransposeMatrix(MATRIX transposeningMatrix)
 	return transposeningMatrix;
 }
 
-MATRIX GetReverceMatrix(MATRIX revercingMatrix)
+MATRIX MatrixCalculator::GetReverceMatrix(MATRIX revercingMatrix)
 {
 	if (revercingMatrix.size() != revercingMatrix[0].size())
 	{
@@ -148,6 +165,20 @@ MATRIX GetReverceMatrix(MATRIX revercingMatrix)
 	}
 
 	MATRIX finalMatrix(revercingMatrix.size(), vector<double>(revercingMatrix.size()));
+	double determinant = GetDeterminant(revercingMatrix);
+
+	if (determinant == 0) // Вырожденная матрица
+		return revercingMatrix;
+
+	for (size_t i = 0; i < revercingMatrix.size(); i++)
+	{
+		for (size_t j = 0; j < revercingMatrix[i].size(); j++)
+		{
+			MATRIX tmp = Exclude(revercingMatrix, i, j);  // Получаем матрицу без i-го столбца и j-ой строки
+			finalMatrix[i][j] = (1 / determinant) * GetDeterminant(tmp);
+		}
+	}
+
 	return finalMatrix;
 }
 

@@ -9,8 +9,9 @@ typedef vector<vector<double>> MATRIX;
 static class MatrixCalculator
 {
 private:
-	double GetDeterminant(MATRIX matrix);
-	MATRIX GetMinor(MATRIX matrix, int row, int column);
+	static double GetDeterminant(MATRIX matrix);
+	static MATRIX GetMinor(MATRIX matrix, int row, int column);
+	static MATRIX Exclude(MATRIX matrix, int row, int column);
 public:
 	MatrixCalculator();
 	~MatrixCalculator();
