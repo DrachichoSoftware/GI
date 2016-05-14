@@ -3,19 +3,21 @@
 
 #include "stdafx.h"
 #include "Matrix.h"
-
+#include <string>
 #define MAX_LOADSTRING 100
-
 // Global Variables:
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+bool isAMatrix = true;
+
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
+BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -134,6 +136,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
+		if (wmId == IDD_INPUTB)
+		{
+			isAMatrix = false;
+		}
+		if (wmId == IDD_INPUTA)
+		{
+			isAMatrix = true;
+		}
 		// Parse the menu selections:
 		switch (wmId)
 		{
@@ -144,6 +154,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hWnd);
 			break;
 		default:
+			DialogBox(hInst, MAKEINTRESOURCE(wmId), hWnd, DlgProc);
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
 		break;
@@ -179,4 +190,77 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return (INT_PTR)FALSE;
+}
+
+BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+{
+	switch (msg)
+	{
+	case WM_INITDIALOG:  /* сообщение о создании диалога */
+	case WM_CREATE:
+		if (LOWORD(wp) == IDD_MN4)
+		{
+			SendDlgItemMessage(hDlg, 20, CB_ADDSTRING, NULL, (LPARAM)"A");
+			SendDlgItemMessage(hDlg, 20, CB_ADDSTRING, NULL, (LPARAM)"B");
+		}
+		
+		return TRUE;
+	case WM_COMMAND:    /* сообщение от управляющих элементов */
+		if (LOWORD(wp) == IDOK) EndDialog(hDlg, 0);
+		
+		if (LOWORD(wp) == BTN_SETSIZE)
+		{
+			char bufI[3];
+			char bufJ[3];
+			GetDlgItemTextA(hDlg, I_SIZE, bufI, 3);
+			GetDlgItemTextA(hDlg, J_SIZE, bufJ, 3);
+			int imax = atoi(bufI);
+			int jmax = atoi(bufJ);
+			if (imax == 0 || jmax == 0)
+			{
+				MessageBox(hDlg, "Невозможно задать матрицу указанной размерности! Введите корректные данные!", "Ошибка!", MB_OK | MB_ICONWARNING);
+			}
+			if ((imax > 10) || (jmax > 10))
+			{
+				if (imax > 10)
+				{
+					SetDlgItemTextA(hDlg, I_SIZE, "10");
+					imax = 10;
+				}
+				if (jmax > 10)
+				{
+					SetDlgItemTextA(hDlg, J_SIZE, "10");
+					jmax = 10;
+				}
+				MessageBox(hDlg, "Количество строк/столбцов не должно превышать 10! Размер матрицы был изменен", "Ошибка", MB_OK | MB_ICONINFORMATION);
+			}
+			for (int i = 0; i < imax; i++)
+			{
+				for (int j = 0; j < jmax; j++)
+				{
+					CreateWindow("edit", "0", WS_CHILD | WS_VISIBLE , 235+(15*i), 130+(15*j), 15, 15, hDlg, (HMENU)(310+i+j), NULL, NULL);
+				}
+				int x = 0;
+				x++;
+			}
+			if (isAMatrix)
+			{
+				//заполняем матрицу А
+			}
+			else
+			{
+				//заполняем матрицу В
+			}
+		}
+
+		if (LOWORD(wp) == BTN_MN4)
+		{
+			char buf[255];
+			long x = 0;
+			GetDlgItemTextA(hDlg, 21, buf, 10);
+			x = atol(buf);
+			//уможить
+		}
+	}
+	return FALSE;
 }
