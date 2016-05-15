@@ -1,6 +1,7 @@
 // Matrix.cpp : Defines the entry point for the application.
 //
 
+#include "MatrixCalculator.h"
 #include "stdafx.h"
 #include "Matrix.h"
 #include <string>
@@ -11,6 +12,9 @@ TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 bool isAMatrix = true;
 
+MATRIX firstMatrix;
+MATRIX secondMatrix;
+MATRIX finalMatrix;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -216,6 +220,9 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			GetDlgItemTextA(hDlg, J_SIZE, bufJ, 3);
 			int imax = atoi(bufI);
 			int jmax = atoi(bufJ);
+
+			firstMatrix.assign(imax, vector<double>(jmax)); // ТАК ЗАДАЕТСЯ РАЗМЕР
+
 			if (imax == 0 || jmax == 0)
 			{
 				MessageBox(hDlg, "Невозможно задать матрицу указанной размерности! Введите корректные данные!", "Ошибка!", MB_OK | MB_ICONWARNING);
@@ -246,10 +253,24 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			if (isAMatrix)
 			{
 				//заполняем матрицу А
+				for (size_t i = 0; i < firstMatrix.size(); i++)
+				{
+					for (size_t j = 0; j < firstMatrix[i].size(); j++)
+					{
+						firstMatrix[i][j] = 0; // ТУТ ПРИСВАИВАЕМ ЭЛЕМЕНТЫ
+					}
+				}
 			}
 			else
 			{
 				//заполняем матрицу В
+				for (size_t i = 0; i < secondMatrix.size(); i++)
+				{
+					for (size_t j = 0; j < secondMatrix[i].size(); j++)
+					{
+						firstMatrix[i][j] = 0; // ТУТ ПРИСВАИВАЕМ ЭЛЕМЕНТЫ
+					}
+				}
 			}
 		}
 
@@ -260,6 +281,8 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			GetDlgItemTextA(hDlg, 21, buf, 10);
 			x = atol(buf);
 			//уможить
+			finalMatrix.assign(firstMatrix.size(), vector<double>(secondMatrix.size())); //ЗАДАЛИ РАЗМЕР
+			finalMatrix = MatrixCalculator::MultiplyMatrix(firstMatrix, secondMatrix); // ВРОДЕ ВЫЗВАЛ Я ХЗ
 		}
 	}
 	return FALSE;

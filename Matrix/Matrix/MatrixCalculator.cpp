@@ -127,7 +127,7 @@ MATRIX MatrixCalculator::MultiplyMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 
 MATRIX MatrixCalculator::MultiplyOnNumber(double number, MATRIX multiplyingMatrix)
 {
-	MATRIX finalMatrix;
+	MATRIX finalMatrix(multiplyingMatrix.size(), vector<double>(multiplyingMatrix.size()));
 
 	for (size_t i = 0; i < multiplyingMatrix.size(); i++)
 	{
