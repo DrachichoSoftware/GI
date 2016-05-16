@@ -28,7 +28,7 @@ double MatrixCalculator::GetDeterminant(MATRIX matrix)
 	{
 		for (size_t i = 0; i < matrix[0].size(); i++)
 		{
-			determinant += pow(-1, i) * matrix[0][i] * GetDeterminant(GetMinor(matrix, 0, i));
+			determinant += pow(-1, i + 2) * matrix[0][i] * GetDeterminant(GetMinor(matrix, 0, i));
 		}
 	}
 
@@ -66,7 +66,7 @@ MATRIX MatrixCalculator::Exclude(MATRIX matrix, int row, int column)
 {
 	for (size_t i = 0; i < matrix.size(); i++)
 	{
-		for (size_t j = 0; j < matrix[j].size(); j++)
+		for (size_t j = 0; j < matrix[i].size(); j++)
 		{
 			if ((int)j == column)
 			{
@@ -91,7 +91,7 @@ MatrixCalculator::~MatrixCalculator()
 
 MATRIX MatrixCalculator::AddMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 {
-	MATRIX finalMatrix;
+	MATRIX finalMatrix(firstMatrix.size(), vector<double>(firstMatrix.size()));
 	for (size_t i = 0; i < firstMatrix.size(); i++)
 	{
 		for (size_t j = 0; j < firstMatrix[i].size(); j++)
@@ -106,18 +106,18 @@ MATRIX MatrixCalculator::AddMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 
 MATRIX MatrixCalculator::MultiplyMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 {
-	MATRIX finalMatrix;
+	MATRIX finalMatrix(firstMatrix.size(), vector<double>(secondMatrix[0].size()));
 	int rows = firstMatrix.size();
 	int cols = secondMatrix[0].size();
 	int inner = secondMatrix.size();
-
 	for (int i = 0; i < rows; i++)
 	{
 		for (int j = 0; j < cols; j++)
 		{
+			finalMatrix[i][j] = 0;
 			for (int k = 0; k < inner; k++)
 			{
-				finalMatrix[i][j] = firstMatrix[i][k] * secondMatrix[k][j];
+				finalMatrix[i][j] += firstMatrix[i][k] * secondMatrix[k][j];
 			}
 		}
 	}
@@ -128,7 +128,6 @@ MATRIX MatrixCalculator::MultiplyMatrix(MATRIX firstMatrix, MATRIX secondMatrix)
 MATRIX MatrixCalculator::MultiplyOnNumber(double number, MATRIX multiplyingMatrix)
 {
 	MATRIX finalMatrix(multiplyingMatrix.size(), vector<double>(multiplyingMatrix.size()));
-
 	for (size_t i = 0; i < multiplyingMatrix.size(); i++)
 	{
 		for (size_t j = 0; j < multiplyingMatrix[i].size(); j++)
@@ -142,19 +141,19 @@ MATRIX MatrixCalculator::MultiplyOnNumber(double number, MATRIX multiplyingMatri
 
 MATRIX MatrixCalculator::TransposeMatrix(MATRIX transposeningMatrix)
 {
-	double tmp;
-
-	for (size_t i = 0; i < transposeningMatrix.size(); i++)
+	//double tmp;
+	MATRIX finalMatrix(transposeningMatrix[0].size(), vector<double>(transposeningMatrix.size()));
+	for (size_t j = 0; j < transposeningMatrix.size(); j++)
 	{
-		for (size_t j = 0; j < transposeningMatrix[j].size(); j++)
+		for (size_t i = 0; i < transposeningMatrix[j].size(); i++)
 		{
-			tmp = transposeningMatrix[i][j];
-			transposeningMatrix[i][j] = transposeningMatrix[j][i];
-			transposeningMatrix[j][i] = tmp;
+		//	tmp = transposeningMatrix[i][j];
+			finalMatrix[i][j] = transposeningMatrix[j][i];
+		//	transposeningMatrix[j][i] = tmp;
 		}
 	}
 
-	return transposeningMatrix;
+	return finalMatrix;
 }
 
 MATRIX MatrixCalculator::GetReverceMatrix(MATRIX revercingMatrix)

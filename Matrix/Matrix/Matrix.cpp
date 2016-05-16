@@ -6,12 +6,17 @@
 #include "Matrix.h"
 #include <string>
 #define MAX_LOADSTRING 100
+#define OUTPUT_EDIT_WIDTH 25
+
 // Global Variables:
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
-bool isAMatrix = true;
-
+int currentOperation = 0;
+HWND hw;
+HWND a[101];
+HWND b[101];
+HWND f[101];
 MATRIX firstMatrix;
 MATRIX secondMatrix;
 MATRIX finalMatrix;
@@ -106,8 +111,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
-
+      CW_USEDEFAULT, 0, 830, 250, NULL, NULL, hInstance, NULL);
+   hw = hWnd;
    if (!hWnd)
    {
       return FALSE;
@@ -140,13 +145,148 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
-		if (wmId == IDD_INPUTB)
+		currentOperation = wmId;
+		
+		if (currentOperation == IDD_SUMMTRX)
 		{
-			isAMatrix = false;
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			if (firstMatrix.size() == 0 || secondMatrix.size() == 0)
+			{
+				MessageBox(hWnd, "Mатрицы должны быть заполнены!", "Ошибка", MB_OK | MB_ICONWARNING);
+			}
+			else
+			{
+				if (firstMatrix.size() == secondMatrix.size() && firstMatrix[0].size() == secondMatrix[0].size())
+				{
+					finalMatrix = MatrixCalculator::AddMatrix(firstMatrix, secondMatrix);
+					char currentElement[255];
+					int ind = 0;
+					for (int j = 0; j < finalMatrix.size(); j++)
+					{
+						for (int i = 0; i < finalMatrix[j].size(); i++)
+						{
+							_gcvt_s(currentElement, finalMatrix[j][i], 10);
+							f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) + 
+								(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+							ind++;
+						}
+					}
+					f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+
+				}
+				else
+				{
+					MessageBox(hWnd, "Mатрицы должны иметь одинаковые размерности! Cложение невозможно!", "Ошибка", MB_OK | MB_ICONWARNING);
+				}
+			}
 		}
-		if (wmId == IDD_INPUTA)
+
+		if (currentOperation == IDD_GETREVERSEA)
 		{
-			isAMatrix = true;
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			if (firstMatrix.size() == firstMatrix[0].size() && firstMatrix.size() != 0)
+			{
+				finalMatrix = MatrixCalculator::GetReverceMatrix(firstMatrix);
+				char currentElement[255];
+				int ind = 0;
+				for (int j = 0; j < finalMatrix.size(); j++)
+				{
+					for (int i = 0; i < finalMatrix[j].size(); i++)
+					{
+						_gcvt_s(currentElement, finalMatrix[j][i], 10);
+						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
+							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						ind++;
+					}
+				}
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+
+			}
+			else
+			{
+				MessageBox(hWnd, "Mатрицa должнa быть заполненa!", "Ошибка", MB_OK | MB_ICONWARNING);
+			}
+		}
+
+		if (currentOperation == IDD_GETREVERSEB)
+		{
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			if (secondMatrix.size() == secondMatrix[0].size() && secondMatrix.size() != 0)
+			{
+				finalMatrix = MatrixCalculator::GetReverceMatrix(secondMatrix);
+				char currentElement[255];
+				int ind = 0;
+				for (int j = 0; j < finalMatrix.size(); j++)
+				{
+					for (int i = 0; i < finalMatrix[j].size(); i++)
+					{
+						_gcvt_s(currentElement, finalMatrix[j][i], 10);
+						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
+							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						ind++;
+					}
+				}
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+
+			}
+			else
+			{
+				MessageBox(hWnd, "Mатрицa должнa быть заполненa!", "Ошибка", MB_OK | MB_ICONWARNING);
+			}
+		}
+
+		if (currentOperation == IDD_TPNMTRXA)
+		{
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			finalMatrix = MatrixCalculator::TransposeMatrix(firstMatrix);
+			char currentElement[255];
+			int ind = 0;
+			for (int j = 0; j < finalMatrix.size(); j++)
+			{
+				for (int i = 0; i < finalMatrix[j].size(); i++)
+				{
+					_gcvt_s(currentElement, finalMatrix[j][i], 10);
+					f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
+						(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+					ind++;
+				}
+			}
+			f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+
+		}
+
+		if (currentOperation == IDD_TPNMTRXB)
+		{
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			finalMatrix = MatrixCalculator::TransposeMatrix(secondMatrix);
+			char currentElement[255];
+			int ind = 0;
+			for (int j = 0; j < finalMatrix.size(); j++)
+			{
+				for (int i = 0; i < finalMatrix[j].size(); i++)
+				{
+					_gcvt_s(currentElement, finalMatrix[j][i], 10);
+					f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
+						(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+					ind++;
+				}
+			}
+			f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 		}
 		// Parse the menu selections:
 		switch (wmId)
@@ -202,27 +342,42 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	{
 	case WM_INITDIALOG:  /* сообщение о создании диалога */
 	case WM_CREATE:
-		if (LOWORD(wp) == IDD_MN4)
+		if (currentOperation == IDD_MN4)
 		{
-			SendDlgItemMessage(hDlg, 20, CB_ADDSTRING, NULL, (LPARAM)"A");
-			SendDlgItemMessage(hDlg, 20, CB_ADDSTRING, NULL, (LPARAM)"B");
+			SendDlgItemMessage(hDlg, ID_CMBBX, CB_ADDSTRING, NULL, (LPARAM)"A");
+			SendDlgItemMessage(hDlg, ID_CMBBX, CB_ADDSTRING, NULL, (LPARAM)"B");
 		}
-		
+
+		//if (currentOperation == IDD_TPNMTRX)
+		//{
+		//	SendDlgItemMessage(hDlg, ID_CMBBX, CB_ADDSTRING, NULL, (LPARAM)"A");
+		//	SendDlgItemMessage(hDlg, ID_CMBBX, CB_ADDSTRING, NULL, (LPARAM)"B");
+		//}
+		if (currentOperation == IDD_MNM)
+		{
+			SendDlgItemMessage(hDlg, ID_CMBBX1, CB_ADDSTRING, NULL, (LPARAM)"A");
+			SendDlgItemMessage(hDlg, ID_CMBBX1, CB_ADDSTRING, NULL, (LPARAM)"B");
+			SendDlgItemMessage(hDlg, ID_CMBBX2, CB_ADDSTRING, NULL, (LPARAM)"A");
+			SendDlgItemMessage(hDlg, ID_CMBBX2, CB_ADDSTRING, NULL, (LPARAM)"B");
+		}
+		//if (currentOperation == IDD_GETREVERSE)
+		//{
+		//	SendDlgItemMessage(hDlg, ID_CMBBX, CB_ADDSTRING, NULL, (LPARAM)"A");
+		//	SendDlgItemMessage(hDlg, ID_CMBBX, CB_ADDSTRING, NULL, (LPARAM)"B");
+		//}
 		return TRUE;
 	case WM_COMMAND:    /* сообщение от управляющих элементов */
-		if (LOWORD(wp) == IDOK) EndDialog(hDlg, 0);
+		if (LOWORD(wp) == IDOK || LOWORD(wp) == IDCANCEL) EndDialog(hDlg, 0);
 		
+		//Ввод матриц
 		if (LOWORD(wp) == BTN_SETSIZE)
 		{
 			char bufI[3];
 			char bufJ[3];
-			GetDlgItemTextA(hDlg, I_SIZE, bufI, 3);
-			GetDlgItemTextA(hDlg, J_SIZE, bufJ, 3);
+			GetDlgItemTextA(hDlg, N_SIZE, bufI, 3);
+			GetDlgItemTextA(hDlg, M_SIZE, bufJ, 3);
 			int imax = atoi(bufI);
 			int jmax = atoi(bufJ);
-
-			firstMatrix.assign(imax, vector<double>(jmax)); // ТАК ЗАДАЕТСЯ РАЗМЕР
-
 			if (imax == 0 || jmax == 0)
 			{
 				MessageBox(hDlg, "Невозможно задать матрицу указанной размерности! Введите корректные данные!", "Ошибка!", MB_OK | MB_ICONWARNING);
@@ -231,59 +386,250 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				if (imax > 10)
 				{
-					SetDlgItemTextA(hDlg, I_SIZE, "10");
+					SetDlgItemTextA(hDlg, N_SIZE, "10");
 					imax = 10;
 				}
 				if (jmax > 10)
 				{
-					SetDlgItemTextA(hDlg, J_SIZE, "10");
+					SetDlgItemTextA(hDlg, M_SIZE, "10");
 					jmax = 10;
 				}
 				MessageBox(hDlg, "Количество строк/столбцов не должно превышать 10! Размер матрицы был изменен", "Ошибка", MB_OK | MB_ICONINFORMATION);
 			}
-			for (int i = 0; i < imax; i++)
+			int ind = 0;
+			for (int j = 0; j < jmax; j++)
 			{
-				for (int j = 0; j < jmax; j++)
+				for (int i = 0; i < imax; i++)
 				{
-					CreateWindow("edit", "0", WS_CHILD | WS_VISIBLE , 235+(15*i), 130+(15*j), 15, 15, hDlg, (HMENU)(310+i+j), NULL, NULL);
+					ind += i + j;
+					CreateWindow("edit", "0", WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_LEFT, 125 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) + 
+						(OUTPUT_EDIT_WIDTH * i), 105 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hDlg, (HMENU)(600 + ind), NULL, NULL);
 				}
 				int x = 0;
 				x++;
 			}
-			if (isAMatrix)
+		}
+		if (LOWORD(wp) == BTN_FILLMTRX)
+		{
+			char bufI[3];
+			char bufJ[3];
+			char currentElement[255];
+			GetDlgItemTextA(hDlg, N_SIZE, bufI, 3);
+			GetDlgItemTextA(hDlg, M_SIZE, bufJ, 3);
+			int imax = atoi(bufJ);									//	Размерности 
+			int jmax = atoi(bufI);									//				матрицы
+			if (currentOperation == IDD_INPUTA)
 			{
-				//заполняем матрицу А
-				for (size_t i = 0; i < firstMatrix.size(); i++)
+				firstMatrix.assign(imax, vector<double>(jmax)); // ТАК ЗАДАЕТСЯ РАЗМЕР
+				int ind = 0;
+				//заполняем матрицу A
+				for (int i = 0; i < firstMatrix.size(); i++)
 				{
-					for (size_t j = 0; j < firstMatrix[i].size(); j++)
+					for (int j = 0; j < firstMatrix[i].size(); j++)
 					{
-						firstMatrix[i][j] = 0; // ТУТ ПРИСВАИВАЕМ ЭЛЕМЕНТЫ
+						ind += i + j;
+						GetDlgItemTextA(hDlg, (600 + ind), currentElement, 255);
+						firstMatrix[i][j] = strtod(currentElement, '\0'); // ТУТ ПРИСВАИВАЕМ ЭЛЕМЕНТЫ
+					}
+				}
+				for (int i = 0; i < 100; i++)
+				{
+					DestroyWindow(a[i]);
+				}
+				ind = 0;
+				for (int j = 0; j < firstMatrix.size(); j++)
+				{
+					for (int i = 0; i < firstMatrix[j].size(); i++)
+					{
+						_gcvt_s(currentElement,firstMatrix[j][i], 3);
+						a[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 5 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) +
+							(OUTPUT_EDIT_WIDTH * i), 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(800 + ind), NULL, NULL);
+						ind++;
+					}
+				}
+				a[100] = CreateWindow("static", "Матрица A", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 30, 5, 100, 20, hw, (HMENU)999, NULL, NULL); //Сделать нормальную заливку и для остальных матриц
+			}
+			if (currentOperation == IDD_INPUTB)
+			{
+				secondMatrix.assign(imax, vector<double>(jmax)); // ТАК ЗАДАЕТСЯ РАЗМЕР
+				int ind = 0;
+				//заполняем матрицу В
+				for (int i = 0; i < secondMatrix.size(); i++)
+				{
+					for (int j = 0; j < secondMatrix[i].size(); j++)
+					{
+						ind += i + j;
+						GetDlgItemTextA(hDlg, (600 + ind), currentElement, 255);
+						secondMatrix[i][j] = atol(currentElement); // ТУТ ПРИСВАИВАЕМ ЭЛЕМЕНТЫ
+					}
+				}
+				for (int i = 0; i < 101; i++)
+				{
+					DestroyWindow(b[i]);
+				}
+				ind = 0;
+				for (int j = 0; j < secondMatrix.size(); j++)
+				{
+					for (int i = 0; i < secondMatrix[j].size(); i++)
+					{
+						_gcvt_s(currentElement, secondMatrix[j][i],  10);
+						b[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 540 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) +
+							(OUTPUT_EDIT_WIDTH * i), 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1000 + ind), NULL, NULL);
+						ind++;
+					}
+				}
+				b[100] = CreateWindow("static", "Матрица B", WS_CHILD | WS_VISIBLE |SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 600, 5, 100, 20, hw, (HMENU)999, NULL, NULL); //Сделать нормальную заливку и для остальных матриц
+			}
+
+			EndDialog(hDlg, 0);
+		}
+
+		//Умножение матрицы на число
+		if (LOWORD(wp) == BTN_MN4)
+		{
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			bool isOK = true;
+			char buf[255];
+			long number = 0;
+			GetDlgItemTextA(hDlg, 21, buf, 10);
+			number = atol(buf);
+			char bufM[2];
+			GetDlgItemTextA(hDlg, ID_CMBBX, bufM, 2);
+			if (bufM[0] == 'A' && firstMatrix.size() != 0)
+			{
+				finalMatrix = MatrixCalculator::MultiplyOnNumber(number, firstMatrix);
+			}
+			else
+			{
+				if (bufM[0] == 'B' && secondMatrix.size() != 0)
+				{
+					finalMatrix = MatrixCalculator::MultiplyOnNumber(number, secondMatrix);
+				}
+				else
+				{
+					isOK = false;
+					MessageBox(hDlg, "Выбранная матрица не заполнена!", "Ошибка!", MB_OK | MB_ICONWARNING);
+				}
+			}
+			if (isOK)
+			{
+				char currentElement[255];
+				int ind = 0;
+				for (int j = 0; j < finalMatrix.size(); j++)
+				{
+					for (int i = 0; i < finalMatrix[j].size(); i++)
+					{
+						_gcvt_s( currentElement, finalMatrix[j][i], 10);
+						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
+							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						ind++;
+					}
+				}
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+
+				EndDialog(hDlg, 0);
+			}
+		}
+		
+		////Транспонирование матрицы
+		//if (LOWORD(wp) == BTN_TRNSP)
+		//{
+		//	//транспонируем
+		//	EndDialog(hDlg, 0);
+		//}
+
+		//Умножение матриц
+		if (LOWORD(wp) == BTN_MNM)
+		{
+			for (int i = 0; i < 101; i++)
+			{
+				DestroyWindow(f[i]);
+			}
+			bool isOk = true;
+			char buf1[255];
+			GetDlgItemTextA(hDlg, ID_CMBBX1, buf1, 10);
+			char buf2[255];
+			GetDlgItemTextA(hDlg, ID_CMBBX2, buf2, 10);
+			int n1,m2;
+			if (buf1[0] == 'A')
+			{
+				n1 = firstMatrix[0].size();
+			}
+			else
+			{
+				n1 = secondMatrix[0].size();
+			}
+			if (buf2[0] == 'B')
+			{
+				m2 = secondMatrix.size();
+			}
+			else
+			{
+				m2 = firstMatrix.size();
+			}
+			if (buf1[0] == '\0' || buf2[0] == '\0')
+			{
+				MessageBox(hDlg, "Не выбрана матрица(-ы) для умножения!", "Ошибка!", MB_OK | MB_ICONWARNING);
+				isOk = false;
+			}
+			if (n1 == m2 && n1 != 0)
+			{
+				if (buf1[0] == 'A')
+				{
+					if (buf1[0] == 'A')
+					{
+						finalMatrix = MatrixCalculator::MultiplyMatrix(firstMatrix, firstMatrix);
+					}
+					else
+					{
+						finalMatrix = MatrixCalculator::MultiplyMatrix(firstMatrix, secondMatrix);
+					}
+				}
+				else
+				{
+					if (buf2[0] == 'B')
+					{
+						finalMatrix = MatrixCalculator::MultiplyMatrix(secondMatrix, secondMatrix);
+					}
+					else
+					{
+						finalMatrix = MatrixCalculator::MultiplyMatrix(secondMatrix, firstMatrix);
 					}
 				}
 			}
 			else
 			{
-				//заполняем матрицу В
-				for (size_t i = 0; i < secondMatrix.size(); i++)
+				isOk = false;
+				MessageBox(hDlg, "Число стобцов первой матрицы не равно числу строк второй, или матрица не заполнена! Умножение невозможно!", "Ошибка", MB_OK | MB_ICONINFORMATION);
+			}
+			if (isOk)
+			{
+				char currentElement[255];
+				int ind = 0;
+				for (int j = 0; j < finalMatrix.size(); j++)
 				{
-					for (size_t j = 0; j < secondMatrix[i].size(); j++)
+					for (int i = 0; i < finalMatrix[j].size(); i++)
 					{
-						firstMatrix[i][j] = 0; // ТУТ ПРИСВАИВАЕМ ЭЛЕМЕНТЫ
+						_gcvt_s( currentElement, finalMatrix[j][i], 10);
+						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
+							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						ind++;
 					}
 				}
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+
+				EndDialog(hDlg, 0);
 			}
 		}
 
-		if (LOWORD(wp) == BTN_MN4)
-		{
-			char buf[255];
-			long x = 0;
-			GetDlgItemTextA(hDlg, 21, buf, 10);
-			x = atol(buf);
-			//уможить
-			finalMatrix.assign(firstMatrix.size(), vector<double>(secondMatrix.size())); //ЗАДАЛИ РАЗМЕР
-			finalMatrix = MatrixCalculator::MultiplyMatrix(firstMatrix, secondMatrix); // ВРОДЕ ВЫЗВАЛ Я ХЗ
-		}
+		//Получение обратной матрицы
+		//if (LOWORD(wp) == BTN_REVERSE)
+		//{
+		//	//Выполнить
+		//}
 	}
 	return FALSE;
 }
