@@ -143,12 +143,12 @@ MATRIX MatrixCalculator::TransposeMatrix(MATRIX transposeningMatrix)
 {
 	//double tmp;
 	MATRIX finalMatrix(transposeningMatrix[0].size(), vector<double>(transposeningMatrix.size()));
-	for (size_t j = 0; j < transposeningMatrix.size(); j++)
+	for (size_t i = 0; i < transposeningMatrix.size(); i++)
 	{
-		for (size_t i = 0; i < transposeningMatrix[j].size(); i++)
+		for (size_t j = 0; j < transposeningMatrix[0].size(); j++)
 		{
 		//	tmp = transposeningMatrix[i][j];
-			finalMatrix[i][j] = transposeningMatrix[j][i];
+			finalMatrix[j][i] = transposeningMatrix[i][j];
 		//	transposeningMatrix[j][i] = tmp;
 		}
 	}

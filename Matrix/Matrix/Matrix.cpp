@@ -6,7 +6,32 @@
 #include "Matrix.h"
 #include <string>
 #define MAX_LOADSTRING 100
-#define OUTPUT_EDIT_WIDTH 25
+#define OUTPUT_EDIT_WIDTH 20
+
+string FormatNumber(string number)
+{
+	string formatedNumber;
+
+	int pointPos = number.find(".");
+	/*if (pointPos == number.size() - 1)
+	{
+		return number + "0";
+	}
+	else
+	{*/
+		number = number.substr(0, pointPos + 3);
+		if (pointPos > 3)
+		{
+			formatedNumber = number.substr(pointPos - 3, 6);
+		}
+		else
+		{
+			formatedNumber = number;
+		}
+	//}
+	
+	return formatedNumber;
+}
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
@@ -111,7 +136,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, 830, 250, NULL, NULL, hInstance, NULL);
+      CW_USEDEFAULT, 0, 1300, 250, NULL, NULL, hInstance, NULL);
    hw = hWnd;
    if (!hWnd)
    {
@@ -164,17 +189,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					finalMatrix = MatrixCalculator::AddMatrix(firstMatrix, secondMatrix);
 					char currentElement[255];
 					int ind = 0;
-					for (int j = 0; j < finalMatrix.size(); j++)
+					for (int i = 0; i < finalMatrix.size(); i++)
 					{
-						for (int i = 0; i < finalMatrix[j].size(); i++)
+						for (int j = 0; j < finalMatrix[i].size(); j++)
 						{
-							_gcvt_s(currentElement, finalMatrix[j][i], 10);
-							f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) + 
-								(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+							string str = std::to_string(firstMatrix[i][j]);
+							str = FormatNumber(str);
+							f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+							HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+								OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+								DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+							SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 							ind++;
 						}
 					}
-					f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+					f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 
 				}
 				else
@@ -195,17 +226,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				finalMatrix = MatrixCalculator::GetReverceMatrix(firstMatrix);
 				char currentElement[255];
 				int ind = 0;
-				for (int j = 0; j < finalMatrix.size(); j++)
+				for (int i = 0; i < finalMatrix.size(); i++)
 				{
-					for (int i = 0; i < finalMatrix[j].size(); i++)
+					for (int j = 0; j < finalMatrix[i].size(); j++)
 					{
-						_gcvt_s(currentElement, finalMatrix[j][i], 10);
-						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
-							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						string str = std::to_string(firstMatrix[i][j]);
+						str = FormatNumber(str);
+						f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+						HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+							OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+						SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 						ind++;
 					}
 				}
-				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 
 			}
 			else
@@ -225,17 +262,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				finalMatrix = MatrixCalculator::GetReverceMatrix(secondMatrix);
 				char currentElement[255];
 				int ind = 0;
-				for (int j = 0; j < finalMatrix.size(); j++)
+				for (int i = 0; i < finalMatrix.size(); i++)
 				{
-					for (int i = 0; i < finalMatrix[j].size(); i++)
+					for (int j = 0; j < finalMatrix[i].size(); j++)
 					{
-						_gcvt_s(currentElement, finalMatrix[j][i], 10);
-						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
-							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						string str = std::to_string(firstMatrix[i][j]);
+						str = FormatNumber(str);
+						f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+						HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+							OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+						SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 						ind++;
 					}
 				}
-				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 
 			}
 			else
@@ -253,17 +296,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			finalMatrix = MatrixCalculator::TransposeMatrix(firstMatrix);
 			char currentElement[255];
 			int ind = 0;
-			for (int j = 0; j < finalMatrix.size(); j++)
+			for (int i = 0; i < finalMatrix.size(); i++)
 			{
-				for (int i = 0; i < finalMatrix[j].size(); i++)
+				for (int j = 0; j < finalMatrix[i].size(); j++)
 				{
-					_gcvt_s(currentElement, finalMatrix[j][i], 10);
-					f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
-						(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+					string str = std::to_string(firstMatrix[i][j]);
+					str = FormatNumber(str);
+					f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+					HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+						OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+						DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+					SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 					ind++;
 				}
 			}
-			f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+			f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 
 		}
 
@@ -276,17 +325,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			finalMatrix = MatrixCalculator::TransposeMatrix(secondMatrix);
 			char currentElement[255];
 			int ind = 0;
-			for (int j = 0; j < finalMatrix.size(); j++)
+			for (int i = 0; i < finalMatrix.size(); i++)
 			{
-				for (int i = 0; i < finalMatrix[j].size(); i++)
+				for (int j = 0; j < finalMatrix[i].size(); j++)
 				{
-					_gcvt_s(currentElement, finalMatrix[j][i], 10);
-					f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
-						(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+					string str = std::to_string(firstMatrix[i][j]);
+					str = FormatNumber(str);
+					f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+					HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+						OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+						DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+					SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 					ind++;
 				}
 			}
-			f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+			f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 		}
 		// Parse the menu selections:
 		switch (wmId)
@@ -402,7 +457,7 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 				for (int i = 0; i < imax; i++)
 				{
 					ind += i + j;
-					CreateWindow("edit", "0", WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_LEFT, 125 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) + 
+					CreateWindow("edit", "0", WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_LEFT, 125 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) +
 						(OUTPUT_EDIT_WIDTH * i), 105 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hDlg, (HMENU)(600 + ind), NULL, NULL);
 				}
 				int x = 0;
@@ -437,13 +492,19 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 					DestroyWindow(a[i]);
 				}
 				ind = 0;
-				for (int j = 0; j < firstMatrix.size(); j++)
+				for (int i = 0; i < firstMatrix.size(); i++)
 				{
-					for (int i = 0; i < firstMatrix[j].size(); i++)
+					for (int j = 0; j < firstMatrix[i].size(); j++)
 					{
-						_gcvt_s(currentElement,firstMatrix[j][i], 3);
-						a[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 5 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) +
-							(OUTPUT_EDIT_WIDTH * i), 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(800 + ind), NULL, NULL);
+						string str = std::to_string(firstMatrix[i][j]);
+						str = FormatNumber(str);
+						a[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, A_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+						HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+							OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+						SendMessage(a[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 						ind++;
 					}
 				}
@@ -472,13 +533,19 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 				{
 					for (int i = 0; i < secondMatrix[j].size(); i++)
 					{
-						_gcvt_s(currentElement, secondMatrix[j][i],  10);
-						b[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 540 + (int)(OUTPUT_EDIT_WIDTH * (10 - imax) / 2) +
-							(OUTPUT_EDIT_WIDTH * i), 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1000 + ind), NULL, NULL);
+						string str = std::to_string(firstMatrix[i][j]);
+						str = FormatNumber(str);
+						b[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, B_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+						HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+							OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+						SendMessage(b[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 						ind++;
 					}
 				}
-				b[100] = CreateWindow("static", "Матрица B", WS_CHILD | WS_VISIBLE |SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 600, 5, 100, 20, hw, (HMENU)999, NULL, NULL); //Сделать нормальную заливку и для остальных матриц
+				b[100] = CreateWindow("static", "Матрица B", WS_CHILD | WS_VISIBLE |SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 1000, 5, 100, 20, hw, (HMENU)999, NULL, NULL); //Сделать нормальную заливку и для остальных матриц
 			}
 
 			EndDialog(hDlg, 0);
@@ -518,30 +585,29 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				char currentElement[255];
 				int ind = 0;
-				for (int j = 0; j < finalMatrix.size(); j++)
+				for (int i = 0; i < finalMatrix.size(); i++)
 				{
-					for (int i = 0; i < finalMatrix[j].size(); i++)
+					for (int j = 0; j < finalMatrix[i].size(); j++)
 					{
-						_gcvt_s( currentElement, finalMatrix[j][i], 10);
-						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
-							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						std::string str = std::to_string(finalMatrix[i][j]);
+						str = FormatNumber(str);
+						f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+						HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+							OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+						SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 						ind++;
 					}
 				}
-				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 
 				EndDialog(hDlg, 0);
 			}
 		}
 		
-		////Транспонирование матрицы
-		//if (LOWORD(wp) == BTN_TRNSP)
-		//{
-		//	//транспонируем
-		//	EndDialog(hDlg, 0);
-		//}
 
-		//Умножение матриц
 		if (LOWORD(wp) == BTN_MNM)
 		{
 			for (int i = 0; i < 101; i++)
@@ -579,7 +645,7 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				if (buf1[0] == 'A')
 				{
-					if (buf1[0] == 'A')
+					if (buf2[0] == 'A')
 					{
 						finalMatrix = MatrixCalculator::MultiplyMatrix(firstMatrix, firstMatrix);
 					}
@@ -609,27 +675,28 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				char currentElement[255];
 				int ind = 0;
-				for (int j = 0; j < finalMatrix.size(); j++)
+				for (int i = 0; i < finalMatrix.size(); i++)
 				{
-					for (int i = 0; i < finalMatrix[j].size(); i++)
+					for (int j = 0; j < finalMatrix[i].size(); j++)
 					{
-						_gcvt_s( currentElement, finalMatrix[j][i], 10);
-						f[ind] = CreateWindow("edit", currentElement, WS_CHILD | WS_VISIBLE, 270 + (int)(OUTPUT_EDIT_WIDTH * (10 - finalMatrix.size()) / 2) +
-							(OUTPUT_EDIT_WIDTH * i) + 5, 30 + (15 * j), OUTPUT_EDIT_WIDTH, 15, hw, (HMENU)(1200 + ind), NULL, NULL);
+						string str = std::to_string(firstMatrix[i][j]);
+						str = FormatNumber(str);
+						f[ind] = CreateWindow("edit", str.c_str(), WS_CHILD | WS_VISIBLE, RESULT_MATRIX_OFFSET + EDIT_DISTANCE + j * EDIT_WIDTH, TOP_OFFSET + EDIT_DISTANCE + i * EDIT_HEIGHT, EDIT_WIDTH, EDIT_HEIGHT, hw, (HMENU)(1200 + ind), NULL, NULL);
+
+						HFONT hFont = CreateFont(CHAR_HEIGHT, CHAR_WIDTH, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+							OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							DEFAULT_PITCH | FF_SWISS, "Times New Roman");
+
+						SendMessage(f[ind], WM_SETFONT, WPARAM(hFont), TRUE);
 						ind++;
 					}
 				}
-				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 300, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
+				f[100] = CreateWindow("static", "Результат операции", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_SUNKEN | SS_LEFT, 500, 5, 150, 20, hw, (HMENU)999, NULL, NULL);
 
 				EndDialog(hDlg, 0);
 			}
 		}
-
-		//Получение обратной матрицы
-		//if (LOWORD(wp) == BTN_REVERSE)
-		//{
-		//	//Выполнить
-		//}
 	}
 	return FALSE;
 }
+

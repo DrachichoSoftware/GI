@@ -1,15 +1,48 @@
-﻿Build started 16.05.2016 12:09:39.
-     1>Project "C:\Users\HP\Desktop\Matrix\Matrix\Matrix.vcxproj" on node 2 (Build target(s)).
-     1>ResourceCompile:
-         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /l"0x0409" /nologo /fo"Debug\Matrix.res" Matrix.rc 
+﻿Build started 19.05.2016 21:22:14.
+     1>Project "X:\УЧЕБА\Курсачи\Курсач ГИ\Matrix\Matrix\Matrix.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         X:\Visual Studio 2013 Ultimate\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Matrix.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Matrix.cpp
+         Matrix.cpp
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(4): warning C4627: '#include "MatrixCalculator.h"': skipped when looking for precompiled header use
+                 Add directive to 'stdafx.h' or rebuild precompiled header
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrixcalculator.h(24): warning C4091: 'static ' : ignored on left of 'MatrixCalculator' when no variable is declared
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(192): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(194): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(229): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(231): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(265): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(267): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(299): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(301): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(328): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(330): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(190): warning C4101: 'currentElement' : unreferenced local variable
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(227): warning C4101: 'currentElement' : unreferenced local variable
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(263): warning C4101: 'currentElement' : unreferenced local variable
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(297): warning C4101: 'currentElement' : unreferenced local variable
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(326): warning C4101: 'currentElement' : unreferenced local variable
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(481): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(483): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(495): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(497): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(518): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(520): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(532): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(534): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(588): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(590): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(678): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(680): warning C4018: '<' : signed/unsigned mismatch
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(586): warning C4101: 'currentElement' : unreferenced local variable
+     1>x:\учеба\курсачи\курсач ги\matrix\matrix\matrix.cpp(676): warning C4101: 'currentElement' : unreferenced local variable
        Link:
-         X:\Visual Studio 2013 Ultimate\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\HP\Desktop\Matrix\Debug\Matrix.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\HP\Desktop\Matrix\Debug\Matrix.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\HP\Desktop\Matrix\Debug\Matrix.lib" /MACHINE:X86 Debug\Matrix.res
+         X:\Visual Studio 2013 Ultimate\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"X:\УЧЕБА\Курсачи\Курсач ГИ\Matrix\Debug\Matrix.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"X:\УЧЕБА\Курсачи\Курсач ГИ\Matrix\Debug\Matrix.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"X:\УЧЕБА\Курсачи\Курсач ГИ\Matrix\Debug\Matrix.lib" /MACHINE:X86 Debug\Matrix.res
          Debug\Matrix.obj
          Debug\MatrixCalculator.obj
          Debug\stdafx.obj
-         Matrix.vcxproj -> C:\Users\HP\Desktop\Matrix\Debug\Matrix.exe
-     1>Done Building Project "C:\Users\HP\Desktop\Matrix\Matrix\Matrix.vcxproj" (Build target(s)).
+         Matrix.vcxproj -> X:\УЧЕБА\Курсачи\Курсач ГИ\Matrix\Debug\Matrix.exe
+     1>Done Building Project "X:\УЧЕБА\Курсачи\Курсач ГИ\Matrix\Matrix\Matrix.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.36
+Time Elapsed 00:00:01.12
